@@ -1,0 +1,16 @@
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy-all:2.3.11',
+          'com.google.guava:guava:16.0.1', 
+          'org.jetbrains:annotations:13.0'
+  testCompile 'junit:junit:4.11'
+}
