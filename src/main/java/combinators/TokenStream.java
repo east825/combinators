@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Reader;
 import java.util.Collections;
 import java.util.LinkedList;
 

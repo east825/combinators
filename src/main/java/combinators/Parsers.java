@@ -47,13 +47,13 @@ public class Parsers {
   }
 
   @NotNull
-  public static <T> BaseParser<List<T>> many(@NotNull BaseParser<T> repeated) {
-    return repeated.repeated(0, Integer.MAX_VALUE);
+  public static <T> BaseParser<List<T>> many(@NotNull BaseParser<T> parser) {
+    return parser.repeated(0, Integer.MAX_VALUE);
   }
 
   @NotNull
-  public static <T> BaseParser<List<T>> onePlus(@NotNull BaseParser<T> repeated) {
-    return repeated.repeated(1, Integer.MAX_VALUE);
+  public static <T> BaseParser<List<T>> onePlus(@NotNull BaseParser<T> parser) {
+    return parser.repeated(1, Integer.MAX_VALUE);
   }
 
   @NotNull
@@ -70,5 +70,14 @@ public class Parsers {
       }
     });
   }
-  
+
+  @NotNull
+  public static <T> ForwardParser<T> forwarded() {
+    return new ForwardParser<>();
+  }
+
+  @NotNull
+  public static <T> SkipParser<T> skip(@NotNull BaseParser<T> parser) {
+    return new SkipParser<>(parser);
+  }
 }

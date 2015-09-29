@@ -6,18 +6,18 @@ import org.jetbrains.annotations.NotNull;
  * @author Mikhail Golubev
  */
 public class Token {
-  private final String myType;
+  private final Object myType;
   private final int myStartOffset;
   private String myText;
 
-  public Token(@NotNull String type, @NotNull String text, int startOffset) {
+  public Token(@NotNull Object type, @NotNull String text, int startOffset) {
     myType = type;
     myText = text;
     myStartOffset = startOffset;
   }
 
   @NotNull
-  public String getType() {
+  public Object getType() {
     return myType;
   }
 
@@ -37,20 +37,18 @@ public class Token {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof Token)) return false;
+    if (o == null || getClass() != o.getClass()) return false;
 
     Token token = (Token)o;
 
     if (myStartOffset != token.myStartOffset) return false;
-    if (myType != null ? !myType.equals(token.myType) : token.myType != null) return false;
-    if (myText != null ? !myText.equals(token.myText) : token.myText != null) return false;
-
-    return true;
+    if (!myType.equals(token.myType)) return false;
+    return !(myText != null ? !myText.equals(token.myText) : token.myText != null);
   }
 
   @Override
   public int hashCode() {
-    int result = myType != null ? myType.hashCode() : 0;
+    int result = myType.hashCode();
     result = 31 * result + myStartOffset;
     result = 31 * result + (myText != null ? myText.hashCode() : 0);
     return result;
