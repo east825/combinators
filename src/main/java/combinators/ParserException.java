@@ -10,7 +10,7 @@ public class ParserException extends RuntimeException {
   private final int myOffset;
 
   public ParserException(@NotNull String message, int offset) {
-    super(message);
+    super(message + " at " + offset);
     myOffset = offset;
   }
 

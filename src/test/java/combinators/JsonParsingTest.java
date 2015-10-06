@@ -1,6 +1,9 @@
 package combinators;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import combinators.util.Pair;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.BeforeClass;
@@ -68,15 +71,16 @@ public class JsonParsingTest extends CombinatorsTestCase {
       .or(number);
 
     final ForwardParser<Object> value = forwarded();
-    final UsefulParser<List<Object>> commaSeparated = value.then(many(skip(token(COMMA)).then(value))).map(JsonParsingTest::join);
-    final UsefulParser<List<Object>> array = skip(token(L_BRACKET))
-      .then(maybe(commaSeparated).map(JsonParsingTest::notEmpty))
-      .then(skip(token(R_BRACKET)));
-    final UsefulParser<Pair<String, Object>> keyValue = string.then(skip(token(COLON))).then(value);
-    final UsefulParser<List<Pair<String, Object>>> colonSeparated = keyValue.then(many(skip(token(COLON)).then(keyValue))).map(JsonParsingTest::join);
-    final UsefulParser<List<Pair<String, Object>>> object = skip(token(L_BRACE))
-      .then(maybe(colonSeparated).map(JsonParsingTest::notEmpty))
-      .then(skip(token(R_BRACE)));
+    final UsefulParser<List<Object>> array = commaSeparatedCollection(L_BRACKET, value, R_BRACKET);
+    final UsefulParser<Pair<String, Object>> entry = string.then(skip(token(COLON))).then(value);
+    final UsefulParser<Map<String, Object>> object = commaSeparatedCollection(L_BRACE, entry, R_BRACE)
+      .map(pairs -> {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Pair<String, Object> pair : pairs) {
+          result.put(pair.getFirst(), pair.getSecond());
+        }
+        return result;
+      });
     value.define(atom
                    .or(array)
                    .or(object));
@@ -84,16 +88,23 @@ public class JsonParsingTest extends CombinatorsTestCase {
   }
 
   @NotNull
-  private static <T> List<T> join(@NotNull Pair<T, List<T>> pair) {
-    final List<T> result = new ArrayList<>();
-    result.add(pair.getFirst());
-    result.addAll(pair.getSecond());
-    return result;
+  private static <T> UsefulParser<List<T>> commaSeparatedItems(@NotNull UsefulParser<T> item) {
+    return item.then(many(skip(token(COMMA)).then(item))).map(pair -> {
+      final List<T> result = new ArrayList<>();
+      result.add(pair.getFirst());
+      //noinspection ConstantConditions
+      result.addAll(pair.getSecond());
+      return result;
+    });
   }
 
   @NotNull
-  private static <T> List<T> notEmpty(@Nullable List<T> result) {
-    return result == null ? Collections.<T>emptyList() : result;
+  private static <T> UsefulParser<List<T>> commaSeparatedCollection(@NotNull TokenType openBrace,
+                                                                    @NotNull UsefulParser<T> item,
+                                                                    @NotNull TokenType closeBrace) {
+    return skip(token(openBrace))
+      .then(maybe(commaSeparatedItems(item)).map(xs -> xs == null ? Collections.<T>emptyList() : xs))
+      .then(skip(token(closeBrace)));
   }
 
   @Test
@@ -113,8 +124,37 @@ public class JsonParsingTest extends CombinatorsTestCase {
     assertEquals(Collections.singletonList(Collections.singletonList(Collections.emptyList())), parse("[[[]]]"));
   }
 
+  @Test
+  public void testParseObject() throws Exception {
+    final Object parsed = parse("{\n" +
+                                "  \"name\": \"Bob\",\n" +
+                                "  \"age\": 27,\n" +
+                                "  \"address\": {\n" +
+                                "    \"street\": \"Sesame Street\",\n" +
+                                "    \"building\": 17,\n" +
+                                "    \"city\": \"New York\"\n" +
+                                "  },\n" +
+                                "  \"hobbies\": [\n" +
+                                "    \"hiking\",\n" +
+                                "    \"jogging\",\n" +
+                                "    \"cycling\"\n" +
+                                "  ]\n" +
+                                "}");
+    Map<String, Object> expected = ImmutableMap.<String, Object>builder()
+      .put("name", "Bob")
+      .put("age", 27)
+      .put("address", ImmutableMap.builder()
+        .put("street", "Sesame Street")
+        .put("building", 17)
+        .put("city", "New York")
+        .build())
+      .put("hobbies", ImmutableList.of("hiking", "jogging", "cycling"))
+      .build();
+    assertEquals(expected, parsed);
+  }
+
   @Nullable
-  private static Object parse(@NotNull String text) {
+  private static Object parse(@Language("JSON") @NotNull String text) {
     return parse(myGrammar, myLexer, text);
   }
 }
