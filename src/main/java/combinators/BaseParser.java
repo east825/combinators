@@ -1,6 +1,5 @@
 package combinators;
 
-import combinators.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,17 +30,17 @@ public abstract class BaseParser<T> implements Parser<T> {
   }
 
   @NotNull
-  public UsefulParser<List<T>> repeated(final int minTimes, final int maxTimes) {
+  public UsefulParser<List<T>> repeated(int minTimes, int maxTimes) {
     return new UsefulParser<List<T>>() {
       @NotNull
       @Override
       public ParserResult<List<T>> parse(@NotNull TokenStream tokens) throws ParserException {
-        int count = 0;
         final List<T> results = new ArrayList<>();
         TokenStream remaining = tokens;
+        int count = 0;
         try {
           for (/*empty*/; count < maxTimes; count++) {
-            final ParserResult<T> parsed = BaseParser.this.parse(tokens);
+            final ParserResult<T> parsed = BaseParser.this.parse(remaining);
             results.add(parsed.getResult());
             remaining = parsed.getRemainingTokens();
           }

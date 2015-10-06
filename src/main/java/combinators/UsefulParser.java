@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class UsefulParser<T> extends BaseParser<T> {
 
   @NotNull
-  public <T2> UsefulParser<Pair<T, T2>> then(@NotNull final UsefulParser<? extends T2> other) {
+  public <T2> UsefulParser<Pair<T, T2>> then(@NotNull UsefulParser<? extends T2> other) {
     return new UsefulParser<Pair<T,T2>>() {
       @NotNull
       @Override
@@ -23,7 +23,7 @@ public abstract class UsefulParser<T> extends BaseParser<T> {
   }
 
   @NotNull
-  public UsefulParser<T> then(@NotNull final SkipParser<?> skipped) {
+  public UsefulParser<T> then(@NotNull SkipParser<?> skipped) {
     return new UsefulParser<T>() {
       @NotNull
       @Override

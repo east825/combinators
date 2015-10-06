@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Mikhail Golubev
@@ -85,4 +86,7 @@ public class Parsers {
   public static <T> SkipParser<T> skip(@NotNull BaseParser<T> parser) {
     return new SkipParser<>(parser);
   }
+
+  public static final Function<Token, String> tokenText = Token::getText;
+  public static final Function<Token, Object> tokenType = Token::getType;
 }

@@ -70,12 +70,13 @@ public class SimpleLexer {
   }
 
   private class TokenIterator implements Iterator<Token> {
-    int myOffset = skipWhitespacesAndComments(0);
-    Token myLastMatched = null;
     final String myText;
+    Token myLastMatched = null;
+    int myOffset;
 
     private TokenIterator(@NotNull String text) {
       myText = text;
+      myOffset = skipWhitespacesAndComments(0);
     }
 
     private int skipWhitespacesAndComments(int startOffset) {
@@ -120,7 +121,7 @@ public class SimpleLexer {
         }
       }
       myLastMatched = null;
-      myOffset = skipWhitespacesAndComments(myOffset);
+      myOffset = skipWhitespacesAndComments(result.getEndOffset());
       return result;
     }
   }

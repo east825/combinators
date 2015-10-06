@@ -44,9 +44,35 @@ public class TokenStream {
     return getToken(0);
   }
 
-  public int getOffset() {
-    final Token token = getToken();
+  @Nullable
+  public Object getTokenType(int offset) {
+    final Token token = getToken(offset);
+    return token != null ? token.getType() : null;
+  }
+
+  @Nullable
+  public Object getTokenType() {
+    return getTokenType(0);
+  }
+
+  @Nullable
+  public String getTokenText() {
+    return getTokenText(0);
+  }
+
+  @Nullable
+  public String getTokenText(int offset) {
+    final Token token = getToken(offset);
+    return token != null ? token.getText() : null;
+  }
+  
+  public int getOffset(int offset) {
+    final Token token = getToken(offset);
     return token != null ? token.getStartOffset() : -1;
+  }
+
+  public int getOffset() {
+    return getOffset(0);
   }
 
   @NotNull
