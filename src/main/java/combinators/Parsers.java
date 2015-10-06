@@ -13,10 +13,10 @@ public class Parsers {
   }
   
   public static class TokenParser extends UsefulParser<Token> {
-    private final String myExpectedType;
+    private final Object myExpectedType;
     private final String myExpectedText;
 
-    public TokenParser(@NotNull String expectedType, @Nullable String expectedText) {
+    public TokenParser(@NotNull Object expectedType, @Nullable String expectedText) {
       myExpectedType = expectedType;
       myExpectedText = expectedText;
     }
@@ -37,7 +37,7 @@ public class Parsers {
   }
 
   @NotNull
-  public static UsefulParser<Token> token(@NotNull String type) {
+  public static UsefulParser<Token> token(@NotNull Object type) {
     return new TokenParser(type, null);
   }
 
@@ -47,13 +47,18 @@ public class Parsers {
   }
 
   @NotNull
-  public static <T> BaseParser<List<T>> many(@NotNull BaseParser<T> parser) {
+  public static <T> UsefulParser<List<T>> many(@NotNull BaseParser<T> parser) {
     return parser.repeated(0, Integer.MAX_VALUE);
   }
 
   @NotNull
-  public static <T> BaseParser<List<T>> onePlus(@NotNull BaseParser<T> parser) {
+  public static <T> UsefulParser<List<T>> onePlus(@NotNull BaseParser<T> parser) {
     return parser.repeated(1, Integer.MAX_VALUE);
+  }
+
+  @NotNull
+  public static <T> UsefulParser<T> maybe(@NotNull BaseParser<T> parser) {
+    return parser.optional();
   }
 
   @NotNull

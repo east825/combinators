@@ -1,37 +1,56 @@
 package combinators;
 
-import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Reader;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * @author Mikhail Golubev
  */
 public class TokenStream {
-  private final LinkedList<Token> myTokens;
+  private final Iterator<Token> myTokens;
+  private final List<Token> myTokenBuffer;
+  private final int myBufferStart;
 
-  public TokenStream(@NotNull Iterable<Token> tokens) {
-    myTokens = Lists.newLinkedList(tokens);
+  public TokenStream(@NotNull Iterator<Token> tokens) {
+    myTokens = tokens;
+    myTokenBuffer = new ArrayList<>();
+    myBufferStart = 0;
+  }
+
+  private TokenStream(@NotNull TokenStream other, int start) {
+    myTokens = other.myTokens;
+    myTokenBuffer = other.myTokenBuffer;
+    myBufferStart = start;
+  }
+
+  @Nullable
+  public Token getToken(int offset) {
+    final int absOffset = myBufferStart + offset;
+    if (absOffset >= myTokenBuffer.size()) {
+      for (int i = myTokenBuffer.size(); i <= absOffset; i++) {
+        if (!myTokens.hasNext()) {
+          return null;
+        }
+        myTokenBuffer.add(myTokens.next());
+      }
+    }
+    return myTokenBuffer.get(absOffset);
   }
 
   @Nullable
   public Token getToken() {
-    return myTokens.peek();
+    return getToken(0);
   }
 
   public int getOffset() {
-    return getToken().getStartOffset();
+    final Token token = getToken();
+    return token != null ? token.getStartOffset() : -1;
   }
 
   @NotNull
   public TokenStream advance() {
-    if (myTokens.isEmpty()) {
-      return new TokenStream(Collections.<Token>emptyList());
-    }
-    return new TokenStream(myTokens.subList(1, myTokens.size()));
+    return new TokenStream(this, myBufferStart + 1);
   }
 }
