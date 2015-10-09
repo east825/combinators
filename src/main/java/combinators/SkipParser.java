@@ -20,8 +20,8 @@ public final class SkipParser<T> extends BaseParser<T> {
   }
 
   @NotNull
-  public <T2> UsefulParser<T2> then(@NotNull final UsefulParser<? extends T2> other) {
-    return new UsefulParser<T2>() {
+  public <T2> Parser<T2> then(@NotNull final Parser<? extends T2> other) {
+    return new Parser<T2>() {
       @NotNull
       @Override
       public ParserResult<T2> parse(@NotNull TokenStream tokens) throws ParserException {

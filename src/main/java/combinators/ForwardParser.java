@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Mikhail Golubev
  */
-public class ForwardParser<T> extends UsefulParser<T> {
-  private UsefulParser<T> myDelegate = null;
+public class ForwardParser<T> extends Parser<T> {
+  private Parser<T> myDelegate = null;
 
-  public void define(@NotNull UsefulParser<T> definition) {
+  public void define(@NotNull Parser<T> definition) {
     myDelegate = definition;
   }
 

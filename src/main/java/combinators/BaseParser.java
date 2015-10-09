@@ -9,11 +9,11 @@ import java.util.function.Function;
 /**
  * @author Mikhail Golubev
  */
-public abstract class BaseParser<T> implements Parser<T> {
+public abstract class BaseParser<T> {
 
   @NotNull
-  public UsefulParser<T> or(@NotNull final BaseParser<? extends T> other) {
-    return new UsefulParser<T>() {
+  public Parser<T> or(@NotNull final BaseParser<? extends T> other) {
+    return new Parser<T>() {
       @NotNull
       @Override
       public ParserResult<T> parse(@NotNull TokenStream tokens) {
@@ -30,8 +30,8 @@ public abstract class BaseParser<T> implements Parser<T> {
   }
 
   @NotNull
-  public UsefulParser<List<T>> repeated(int minTimes, int maxTimes) {
-    return new UsefulParser<List<T>>() {
+  public Parser<List<T>> repeated(int minTimes, int maxTimes) {
+    return new Parser<List<T>>() {
       @NotNull
       @Override
       public ParserResult<List<T>> parse(@NotNull TokenStream tokens) throws ParserException {
@@ -58,8 +58,8 @@ public abstract class BaseParser<T> implements Parser<T> {
   }
 
   @NotNull
-  public UsefulParser<T> optional() {
-    return new UsefulParser<T>() {
+  public Parser<T> optional() {
+    return new Parser<T>() {
       @NotNull
       @Override
       public ParserResult<T> parse(@NotNull TokenStream tokens) throws ParserException {
@@ -74,8 +74,8 @@ public abstract class BaseParser<T> implements Parser<T> {
   }
   
   @NotNull
-  public <T2> UsefulParser<T2> map(@NotNull Function<? super T, ? extends T2> function) {
-    return new UsefulParser<T2>() {
+  public <T2> Parser<T2> map(@NotNull Function<? super T, ? extends T2> function) {
+    return new Parser<T2>() {
       @NotNull
       @Override
       public ParserResult<T2> parse(@NotNull TokenStream tokens) throws ParserException {
@@ -84,4 +84,7 @@ public abstract class BaseParser<T> implements Parser<T> {
       }
     };
   }
+
+  @NotNull
+  public abstract ParserResult<T> parse(@NotNull TokenStream tokens) throws ParserException;
 }

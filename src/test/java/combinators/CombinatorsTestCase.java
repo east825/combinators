@@ -19,7 +19,7 @@ public class CombinatorsTestCase {
   }
 
   @Nullable
-  protected static <T> T parse(@NotNull Parser<T> parser, @NotNull SimpleLexer lexer, @NotNull String text) {
+  protected static <T> T parse(@NotNull BaseParser<T> parser, @NotNull FluentLexer lexer, @NotNull String text) {
     final ParserResult<T> result = parser.parse(lexer.start(text));
     return result.getResult();
   }

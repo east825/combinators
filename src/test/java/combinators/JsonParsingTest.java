@@ -33,12 +33,12 @@ public class JsonParsingTest extends CombinatorsTestCase {
     COLON
   }
 
-  private static SimpleLexer myLexer;
-  private static Parser<Object> myGrammar;
+  private static FluentLexer myLexer;
+  private static BaseParser<Object> myGrammar;
 
   @BeforeClass
   public static void createLexer() {
-    myLexer = SimpleLexer.builder()
+    myLexer = FluentLexer.builder()
       .token("null", NULL_KEYWORD)
       .token("true", TRUE_KEYWORD)
       .token("false", FALSE_KEYWORD)
@@ -56,24 +56,24 @@ public class JsonParsingTest extends CombinatorsTestCase {
 
   @BeforeClass
   public static void createGrammar() {
-    final UsefulParser<Boolean> trueKeyword = token(TRUE_KEYWORD).map(token -> Boolean.TRUE);
-    final UsefulParser<Boolean> falseKeyword = token(FALSE_KEYWORD).map(token -> Boolean.FALSE);
-    final UsefulParser<Object> nullKeyword = token(NULL_KEYWORD).map(token -> null);
-    final UsefulParser<String> string = token(STRING_LITERAL).map(token -> {
+    final Parser<Boolean> trueKeyword = token(TRUE_KEYWORD).map(token -> Boolean.TRUE);
+    final Parser<Boolean> falseKeyword = token(FALSE_KEYWORD).map(token -> Boolean.FALSE);
+    final Parser<Object> nullKeyword = token(NULL_KEYWORD).map(token -> null);
+    final Parser<String> string = token(STRING_LITERAL).map(token -> {
       final String text = token.getText();
       return text.substring(1, text.length() - 1);
     });
-    final UsefulParser<Integer> number = token(NUMBER_LITERAL).map(token -> Integer.valueOf(token.getText()));
-    final UsefulParser<Object> atom = nullKeyword
+    final Parser<Integer> number = token(NUMBER_LITERAL).map(token -> Integer.valueOf(token.getText()));
+    final Parser<Object> atom = nullKeyword
       .or(trueKeyword)
       .or(falseKeyword)
       .or(string)
       .or(number);
 
     final ForwardParser<Object> value = forwarded();
-    final UsefulParser<List<Object>> array = commaSeparatedCollection(L_BRACKET, value, R_BRACKET);
-    final UsefulParser<Pair<String, Object>> entry = string.then(skip(token(COLON))).then(value);
-    final UsefulParser<Map<String, Object>> object = commaSeparatedCollection(L_BRACE, entry, R_BRACE)
+    final Parser<List<Object>> array = commaSeparatedCollection(L_BRACKET, value, R_BRACKET);
+    final Parser<Pair<String, Object>> entry = string.then(skip(token(COLON))).then(value);
+    final Parser<Map<String, Object>> object = commaSeparatedCollection(L_BRACE, entry, R_BRACE)
       .map(pairs -> {
         Map<String, Object> result = new LinkedHashMap<>();
         for (Pair<String, Object> pair : pairs) {
@@ -88,7 +88,7 @@ public class JsonParsingTest extends CombinatorsTestCase {
   }
 
   @NotNull
-  private static <T> UsefulParser<List<T>> commaSeparatedItems(@NotNull UsefulParser<T> item) {
+  private static <T> Parser<List<T>> commaSeparatedItems(@NotNull Parser<T> item) {
     return item.then(many(skip(token(COMMA)).then(item))).map(pair -> {
       final List<T> result = new ArrayList<>();
       result.add(pair.getFirst());
@@ -99,9 +99,9 @@ public class JsonParsingTest extends CombinatorsTestCase {
   }
 
   @NotNull
-  private static <T> UsefulParser<List<T>> commaSeparatedCollection(@NotNull TokenType openBrace,
-                                                                    @NotNull UsefulParser<T> item,
-                                                                    @NotNull TokenType closeBrace) {
+  private static <T> Parser<List<T>> commaSeparatedCollection(@NotNull TokenType openBrace,
+                                                              @NotNull Parser<T> item,
+                                                              @NotNull TokenType closeBrace) {
     return skip(token(openBrace))
       .then(maybe(commaSeparatedItems(item)).map(xs -> xs == null ? Collections.<T>emptyList() : xs))
       .then(skip(token(closeBrace)));

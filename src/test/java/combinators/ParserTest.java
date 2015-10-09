@@ -14,16 +14,16 @@ import static org.junit.Assert.assertEquals;
  * @author Mikhail Golubev
  */
 public class ParserTest extends CombinatorsTestCase {
-  private static final SimpleLexer ourLexer = SimpleLexer.builder()
+  private static final FluentLexer ourLexer = FluentLexer.builder()
     .token("[A-Za-z_]+", "word")
     .token("\\d+", "number")
     .token("[+-]]", "sign")
     .whitespaceToken("\\s+")
     .build();
 
-  private static final UsefulParser<String> WORD = token("word").map(tokenText);
-  private static final UsefulParser<String> NUMBER = token("number").map(tokenText);
-  private static final UsefulParser<String> SIGN = token("sign").map(tokenText);
+  private static final Parser<String> WORD = token("word").map(tokenText);
+  private static final Parser<String> NUMBER = token("number").map(tokenText);
+  private static final Parser<String> SIGN = token("sign").map(tokenText);
   
   
   @Test
@@ -59,7 +59,7 @@ public class ParserTest extends CombinatorsTestCase {
   }
 
   @Nullable
-  private static <T> T parse(@NotNull Parser<T> parser, @NotNull String text) {
+  private static <T> T parse(@NotNull BaseParser<T> parser, @NotNull String text) {
     return parse(parser, ourLexer, text);
   } 
 }

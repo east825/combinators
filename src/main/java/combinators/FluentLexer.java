@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
 /**
  * @author Mikhail Golubev
  */
-public class SimpleLexer {
+public class FluentLexer {
   private final List<Pair<Pattern, Object>> myTokenSpecs;
   private final List<Pattern> myCommentSpecs;
   private final List<Pattern> myWhitespaceSpecs;
 
-  public SimpleLexer(@NotNull List<Pair<Pattern, Object>> specs,
+  public FluentLexer(@NotNull List<Pair<Pattern, Object>> specs,
                      @NotNull List<Pattern> commentSpecs,
                      @NotNull List<Pattern> whitespaceSpecs) {
     myTokenSpecs = specs;
@@ -59,8 +59,8 @@ public class SimpleLexer {
     }
 
     @NotNull
-    public SimpleLexer build() {
-      return new SimpleLexer(myTokenSpecs, myCommentSpecs, myWhitespaceSpecs);
+    public FluentLexer build() {
+      return new FluentLexer(myTokenSpecs, myCommentSpecs, myWhitespaceSpecs);
     }
   }
 

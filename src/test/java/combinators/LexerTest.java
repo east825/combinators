@@ -6,7 +6,7 @@ import org.junit.Test;
  * @author Mikhail Golubev
  */
 public class LexerTest extends CombinatorsTestCase {
-  private static final SimpleLexer ourWordLexer = SimpleLexer.builder()
+  private static final FluentLexer ourWordLexer = FluentLexer.builder()
     .token("\\w+", "word")
     .token("\\s+", "space")
     .build();
