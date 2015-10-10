@@ -56,24 +56,24 @@ public class JsonParsingTest extends CombinatorsTestCase {
 
   @BeforeClass
   public static void createGrammar() {
-    final Parser<Boolean> trueKeyword = token(TRUE_KEYWORD).map(token -> Boolean.TRUE);
-    final Parser<Boolean> falseKeyword = token(FALSE_KEYWORD).map(token -> Boolean.FALSE);
-    final Parser<Object> nullKeyword = token(NULL_KEYWORD).map(token -> null);
-    final Parser<String> string = token(STRING_LITERAL).map(token -> {
+    Parser<Boolean> trueKeyword = token(TRUE_KEYWORD).map(token -> Boolean.TRUE);
+    Parser<Boolean> falseKeyword = token(FALSE_KEYWORD).map(token -> Boolean.FALSE);
+    Parser<Object> nullKeyword = token(NULL_KEYWORD).map(token -> null);
+    Parser<String> string = token(STRING_LITERAL).map(token -> {
       final String text = token.getText();
       return text.substring(1, text.length() - 1);
     });
-    final Parser<Integer> number = token(NUMBER_LITERAL).map(token -> Integer.valueOf(token.getText()));
-    final Parser<Object> atom = nullKeyword
+    Parser<Integer> number = token(NUMBER_LITERAL).map(token -> Integer.valueOf(token.getText()));
+    Parser<Object> atom = nullKeyword
       .or(trueKeyword)
       .or(falseKeyword)
       .or(string)
       .or(number);
 
-    final ForwardParser<Object> value = forwarded();
-    final Parser<List<Object>> array = commaSeparatedCollection(L_BRACKET, value, R_BRACKET);
-    final Parser<Pair<String, Object>> entry = string.then(skip(token(COLON))).then(value);
-    final Parser<Map<String, Object>> object = commaSeparatedCollection(L_BRACE, entry, R_BRACE)
+    ForwardParser<Object> value = forwarded();
+    Parser<List<Object>> array = commaSeparatedCollection(L_BRACKET, value, R_BRACKET);
+    Parser<Pair<String, Object>> entry = string.then(op(COLON)).then(value);
+    Parser<Map<String, Object>> object = commaSeparatedCollection(L_BRACE, entry, R_BRACE)
       .map(pairs -> {
         Map<String, Object> result = new LinkedHashMap<>();
         for (Pair<String, Object> pair : pairs) {
@@ -89,7 +89,7 @@ public class JsonParsingTest extends CombinatorsTestCase {
 
   @NotNull
   private static <T> Parser<List<T>> commaSeparatedItems(@NotNull Parser<T> item) {
-    return item.then(many(skip(token(COMMA)).then(item))).map(pair -> {
+    return item.then(many(op(COMMA).then(item))).map(pair -> {
       final List<T> result = new ArrayList<>();
       result.add(pair.getFirst());
       //noinspection ConstantConditions
@@ -102,9 +102,14 @@ public class JsonParsingTest extends CombinatorsTestCase {
   private static <T> Parser<List<T>> commaSeparatedCollection(@NotNull TokenType openBrace,
                                                               @NotNull Parser<T> item,
                                                               @NotNull TokenType closeBrace) {
-    return skip(token(openBrace))
+    return op(openBrace)
       .then(maybe(commaSeparatedItems(item)).map(xs -> xs == null ? Collections.<T>emptyList() : xs))
-      .then(skip(token(closeBrace)));
+      .then(op(closeBrace));
+  }
+
+  @NotNull
+  private static SkipParser<Token> op(@NotNull TokenType openBrace) {
+    return skip(token(openBrace));
   }
 
   @Test
