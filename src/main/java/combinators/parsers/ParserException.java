@@ -1,4 +1,4 @@
-package combinators;
+package combinators.parsers;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,5 +1,7 @@
 package combinators;
 
+import combinators.parsers.BaseParser;
+import combinators.parsers.ParserResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

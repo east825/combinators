@@ -1,5 +1,6 @@
-package combinators;
+package combinators.parsers;
 
+import combinators.TokenStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

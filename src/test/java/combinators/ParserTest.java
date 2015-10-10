@@ -1,5 +1,7 @@
 package combinators;
 
+import combinators.parsers.BaseParser;
+import combinators.parsers.Parser;
 import combinators.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,7 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static combinators.Parsers.*;
+import static combinators.parsers.Parsers.*;
 import static org.junit.Assert.assertEquals;
 
 /**

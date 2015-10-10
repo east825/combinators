@@ -2,6 +2,10 @@ package combinators;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import combinators.parsers.BaseParser;
+import combinators.parsers.ForwardParser;
+import combinators.parsers.Parser;
+import combinators.parsers.SkipParser;
 import combinators.util.Pair;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +16,7 @@ import org.junit.Test;
 import java.util.*;
 
 import static combinators.JsonParsingTest.TokenType.*;
-import static combinators.Parsers.*;
+import static combinators.parsers.Parsers.*;
 import static org.junit.Assert.assertEquals;
 
 /**
