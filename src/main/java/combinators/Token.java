@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class Token {
   private final Object myType;
   private final int myStartOffset;
-  private String myText;
+  private final String myText;
 
   public Token(@NotNull Object type, @NotNull String text, int startOffset) {
     myType = type;

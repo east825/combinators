@@ -19,7 +19,7 @@ public abstract class BaseParser<T> {
   public abstract void accept(@NotNull ParserVisitor visitor);
   
   @NotNull
-  public final Parser<T> or(@NotNull final BaseParser<? extends T> other) {
+  public final Parser<T> or(@NotNull BaseParser<? extends T> other) {
     return new AlternativeParser<>(this, other);
   }
 

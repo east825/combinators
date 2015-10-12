@@ -25,12 +25,12 @@ public class SkipParser<T> extends BaseParser<T> {
   }
 
   @NotNull
-  public <T2> Parser<T2> then(@NotNull final Parser<? extends T2> other) {
+  public <T2> Parser<T2> then(@NotNull Parser<? extends T2> other) {
     return new SkipThenParser<>(this, other);
   }
 
   @NotNull
-  public <T2> SkipParser<Pair<T, T2>> then(@NotNull final SkipParser<? extends T2> skipped) {
+  public <T2> SkipParser<Pair<T, T2>> then(@NotNull SkipParser<? extends T2> skipped) {
     return new SkipParser<>(new ThenParser<>(this, skipped));
   }
 

@@ -58,6 +58,7 @@ public class JsonParsingTest extends CombinatorsTestCase {
       .build();
   }
 
+  @SuppressWarnings("LocalCanBeFinal")
   @BeforeClass
   public static void createGrammar() {
     Parser<Boolean> trueKeyword = token(TRUE_KEYWORD).map(token -> Boolean.TRUE);
@@ -149,7 +150,7 @@ public class JsonParsingTest extends CombinatorsTestCase {
                                 "    \"cycling\"\n" +
                                 "  ]\n" +
                                 "}");
-    Map<String, Object> expected = ImmutableMap.<String, Object>builder()
+    final Map<String, Object> expected = ImmutableMap.<String, Object>builder()
       .put("name", "Bob")
       .put("age", 27)
       .put("address", ImmutableMap.builder()

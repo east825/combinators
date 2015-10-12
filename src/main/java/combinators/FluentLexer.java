@@ -21,9 +21,9 @@ public class FluentLexer {
   private final List<Pattern> myCommentSpecs;
   private final List<Pattern> myWhitespaceSpecs;
 
-  public FluentLexer(@NotNull List<Pair<Pattern, Object>> specs,
-                     @NotNull List<Pattern> commentSpecs,
-                     @NotNull List<Pattern> whitespaceSpecs) {
+  private FluentLexer(@NotNull List<Pair<Pattern, Object>> specs,
+                      @NotNull List<Pattern> commentSpecs,
+                      @NotNull List<Pattern> whitespaceSpecs) {
     myTokenSpecs = specs;
     myCommentSpecs = commentSpecs;
     myWhitespaceSpecs = whitespaceSpecs;
