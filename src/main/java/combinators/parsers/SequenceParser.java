@@ -8,21 +8,22 @@ import org.jetbrains.annotations.NotNull;
  * @author Mikhail Golubev
  */
 public abstract class SequenceParser<T1, T2, R> extends Parser<R> {
-  protected final BaseParser<? extends T1> myFirst;
-  protected final BaseParser<? extends T2> mySecond;
+  protected final BaseParser<T1> myFirst;
+  protected final BaseParser<T2> mySecond;
 
+  @SuppressWarnings("unchecked")
   public SequenceParser(@NotNull BaseParser<? extends T1> first, @NotNull BaseParser<? extends T2> second) {
-    myFirst = first;
-    mySecond = second;
+    myFirst = (BaseParser<T1>)first;
+    mySecond = (BaseParser<T2>)second;
   }
 
   @NotNull
-  public BaseParser<? extends T1> getFirst() {
+  public BaseParser<T1> getFirst() {
     return myFirst;
   }
 
   @NotNull
-  public BaseParser<? extends T2> getSecond() {
+  public BaseParser<T2> getSecond() {
     return mySecond;
   }
 
@@ -40,8 +41,8 @@ public abstract class SequenceParser<T1, T2, R> extends Parser<R> {
     @NotNull
     @Override
     public ParserResult<Pair<T1, T2>> parse(@NotNull TokenStream tokens) throws ParserException {
-      final ParserResult<? extends T1> parsed1 = myFirst.parse(tokens);
-      final ParserResult<? extends T2> parsed2 = mySecond.parse(parsed1.getRemainingTokens());
+      final ParserResult<T1> parsed1 = myFirst.parse(tokens);
+      final ParserResult<T2> parsed2 = mySecond.parse(parsed1.getRemainingTokens());
       final Pair<T1, T2> combinedResult = Pair.of(parsed1.getResult(), parsed2.getResult());
       return new ParserResult<>(combinedResult, parsed2.getRemainingTokens());
     }
@@ -56,7 +57,7 @@ public abstract class SequenceParser<T1, T2, R> extends Parser<R> {
     @Override
     public ParserResult<T2> parse(@NotNull TokenStream tokens) throws ParserException {
       final ParserResult<?> parsed1 = myFirst.parse(tokens);
-      final ParserResult<? extends T2> parsed2 = mySecond.parse(parsed1.getRemainingTokens());
+      final ParserResult<T2> parsed2 = mySecond.parse(parsed1.getRemainingTokens());
       return new ParserResult<>(parsed2.getResult(), parsed2.getRemainingTokens());
     }
   }
@@ -69,7 +70,7 @@ public abstract class SequenceParser<T1, T2, R> extends Parser<R> {
     @NotNull
     @Override
     public ParserResult<T1> parse(@NotNull TokenStream tokens) throws ParserException {
-      final ParserResult<? extends T1> parsed1 = myFirst.parse(tokens);
+      final ParserResult<T1> parsed1 = myFirst.parse(tokens);
       final ParserResult<?> parsed2 = mySecond.parse(parsed1.getRemainingTokens());
       return new ParserResult<>(parsed1.getResult(), parsed2.getRemainingTokens());
     }

@@ -8,10 +8,11 @@ import org.jetbrains.annotations.Nullable;
  * @author Mikhail Golubev
  */
 public class ForwardParser<T> extends Parser<T> {
-  private Parser<? extends T> myDelegate = null;
+  private Parser<T> myDelegate = null;
 
+  @SuppressWarnings("unchecked")
   public void define(@NotNull Parser<? extends T> definition) {
-    myDelegate = definition;
+    myDelegate = (Parser<T>)definition;
   }
 
   @NotNull

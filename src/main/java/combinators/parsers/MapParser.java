@@ -9,12 +9,13 @@ import java.util.function.Function;
  * @author Mikhail Golubev
  */
 class MapParser<T1, T2> extends Parser<T2> {
-  private final Function<? super T1, ? extends T2> myFunction;
+  private final Function<T1, T2> myFunction;
   private final BaseParser<T1> myParser;
 
+  @SuppressWarnings("unchecked")
   public MapParser(@NotNull BaseParser<T1> parser, @NotNull Function<? super T1, ? extends T2> function) {
     myParser = parser;
-    myFunction = function;
+    myFunction = (Function<T1, T2>)function;
   }
 
   @NotNull

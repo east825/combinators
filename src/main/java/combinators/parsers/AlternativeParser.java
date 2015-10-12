@@ -7,23 +7,23 @@ import org.jetbrains.annotations.NotNull;
  * @author Mikhail Golubev
  */
 class AlternativeParser<T> extends Parser<T> {
-  private final BaseParser<? extends T> myFirst, mySecond;
-
-  public AlternativeParser(@NotNull BaseParser<? extends T> first, BaseParser<? extends T> second) {
-    myFirst = first;
-    mySecond = second;
-  }
+  private final BaseParser<T> myFirst, mySecond;
 
   @SuppressWarnings("unchecked")
+  public AlternativeParser(@NotNull BaseParser<? extends T> first, BaseParser<? extends T> second) {
+    myFirst = (BaseParser<T>)first;
+    mySecond = (BaseParser<T>)second;
+  }
+
   @NotNull
   @Override
   public ParserResult<T> parse(@NotNull TokenStream tokens) {
     try {
-      return (ParserResult<T>)myFirst.parse(tokens);
+      return myFirst.parse(tokens);
     }
     catch (ParserException ignored) {
     }
-    return (ParserResult<T>)mySecond.parse(tokens);
+    return mySecond.parse(tokens);
   }
 
   @Override
@@ -32,12 +32,12 @@ class AlternativeParser<T> extends Parser<T> {
   }
 
   @NotNull
-  public BaseParser<? extends T> getFirst() {
+  public BaseParser<T> getFirst() {
     return myFirst;
   }
 
   @NotNull
-  public BaseParser<? extends T> getSecond() {
+  public BaseParser<T> getSecond() {
     return mySecond;
   }
 }
