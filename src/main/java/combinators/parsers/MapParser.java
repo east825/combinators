@@ -28,4 +28,14 @@ class MapParser<T1, T2> extends Parser<T2> {
   public void accept(@NotNull ParserVisitor visitor) {
     visitor.visitMapParser(this);
   }
+
+  @NotNull
+  public BaseParser<T1> getParser() {
+    return myParser;
+  }
+
+  @NotNull
+  public Function<? super T1, ? extends T2> getFunction() {
+    return myFunction;
+  }
 }

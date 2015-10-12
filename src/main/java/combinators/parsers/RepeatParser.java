@@ -47,4 +47,17 @@ class RepeatParser<T> extends Parser<List<T>> {
   public void accept(@NotNull ParserVisitor visitor) {
     visitor.visitRepeatParser(this);
   }
+
+  public int getMaxTimes() {
+    return myMaxTimes;
+  }
+
+  public int getMinTimes() {
+    return myMinTimes;
+  }
+
+  @NotNull
+  public BaseParser<T> getParser() {
+    return myParser;
+  }
 }

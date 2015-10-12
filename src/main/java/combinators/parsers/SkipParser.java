@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Mikhail Golubev
  */
 public class SkipParser<T> extends BaseSkipParser<T> {
-  private BaseParser<T> myParser = null;
+  private final BaseParser<T> myParser;
 
   public SkipParser(@NotNull BaseParser<T> other) {
     myParser = other;
@@ -22,5 +22,10 @@ public class SkipParser<T> extends BaseSkipParser<T> {
   @Override
   public void accept(@NotNull ParserVisitor visitor) {
     visitor.visitSkipParser(this);
+  }
+
+  @NotNull
+  public BaseParser<T> getParser() {
+    return myParser;
   }
 }

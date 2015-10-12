@@ -35,4 +35,14 @@ public class TokenParser extends Parser<Token> {
   public void accept(@NotNull ParserVisitor visitor) {
     visitor.visitTokenParser(this);
   }
+
+  @NotNull
+  public Object getExpectedType() {
+    return myExpectedType;
+  }
+
+  @Nullable
+  public String getExpectedText() {
+    return myExpectedText;
+  }
 }

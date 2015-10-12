@@ -22,7 +22,6 @@ class AlternativeParser<T> extends Parser<T> {
       return (ParserResult<T>)myFirst.parse(tokens);
     }
     catch (ParserException ignored) {
-
     }
     return (ParserResult<T>)mySecond.parse(tokens);
   }
@@ -30,5 +29,15 @@ class AlternativeParser<T> extends Parser<T> {
   @Override
   public void accept(@NotNull ParserVisitor visitor) {
     visitor.visitAlternativeParser(this);
+  }
+
+  @NotNull
+  public BaseParser<? extends T> getFirst() {
+    return myFirst;
+  }
+
+  @NotNull
+  public BaseParser<? extends T> getSecond() {
+    return mySecond;
   }
 }

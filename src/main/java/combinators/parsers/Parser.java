@@ -10,11 +10,11 @@ public abstract class Parser<T> extends BaseParser<T> {
 
   @NotNull
   public <T2> Parser<Pair<T, T2>> then(@NotNull Parser<? extends T2> other) {
-    return new ThenParser<>(this, other);
+    return new SequenceParser.MatchBoth<>(this, other);
   }
 
   @NotNull
   public Parser<T> then(@NotNull BaseSkipParser<?> skipped) {
-    return new ThenSkipParser<>(this, skipped);
+    return new SequenceParser.MatchThenSkip<>(this, skipped);
   }
 }
