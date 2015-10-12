@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Mikhail Golubev
  */
-public class EofParser extends SkipParser<Object> {
+public class EofParser extends BaseSkipParser<Object> {
 
   private static final String STANDARD_NAME = "<EOF>";
 

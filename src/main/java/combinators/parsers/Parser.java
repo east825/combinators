@@ -14,7 +14,7 @@ public abstract class Parser<T> extends BaseParser<T> {
   }
 
   @NotNull
-  public Parser<T> then(@NotNull SkipParser<?> skipped) {
+  public Parser<T> then(@NotNull BaseSkipParser<?> skipped) {
     return new ThenSkipParser<>(this, skipped);
   }
 }

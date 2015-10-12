@@ -42,7 +42,7 @@ public class Parsers {
   }
 
   @NotNull
-  public static SkipParser<?> eof() {
+  public static EofParser eof() {
     return EOF_PARSER;
   }
 

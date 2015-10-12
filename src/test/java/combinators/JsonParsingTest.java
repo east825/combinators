@@ -2,10 +2,7 @@ package combinators;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import combinators.parsers.BaseParser;
-import combinators.parsers.ForwardParser;
-import combinators.parsers.Parser;
-import combinators.parsers.SkipParser;
+import combinators.parsers.*;
 import combinators.util.Pair;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
