@@ -26,4 +26,9 @@ class AlternativeParser<T> extends Parser<T> {
     }
     return (ParserResult<T>)mySecond.parse(tokens);
   }
+
+  @Override
+  public void accept(@NotNull ParserVisitor visitor) {
+    visitor.visitAlternativeParser(this);
+  }
 }

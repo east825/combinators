@@ -23,4 +23,14 @@ class OptionalParser<T> extends Parser<T> {
     }
     return new ParserResult<>(null, tokens);
   }
+
+  @Override
+  public void accept(@NotNull ParserVisitor visitor) {
+    visitor.visitOptionalParser(this);
+  }
+
+  @NotNull
+  public BaseParser<T> getParser() {
+    return myParser;
+  }
 }

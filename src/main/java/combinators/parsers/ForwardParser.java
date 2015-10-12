@@ -18,4 +18,9 @@ public class ForwardParser<T> extends Parser<T> {
   public ParserResult<T> parse(@NotNull TokenStream tokens) throws ParserException {
     return myDelegate.parse(tokens);
   }
+
+  @Override
+  public void accept(@NotNull ParserVisitor visitor) {
+    visitor.visitForwardParser(this);
+  }
 }

@@ -23,4 +23,9 @@ class MapParser<T1, T2> extends Parser<T2> {
     final ParserResult<T1> parsed = myParser.parse(tokens);
     return new ParserResult<>(myFunction.apply(parsed.getResult()), parsed.getRemainingTokens());
   }
+
+  @Override
+  public void accept(@NotNull ParserVisitor visitor) {
+    visitor.visitMapParser(this);
+  }
 }

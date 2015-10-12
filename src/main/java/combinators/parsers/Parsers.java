@@ -1,9 +1,7 @@
 package combinators.parsers;
 
 import combinators.Token;
-import combinators.TokenStream;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Function;
@@ -12,31 +10,10 @@ import java.util.function.Function;
  * @author Mikhail Golubev
  */
 public class Parsers {
+
+  private static final EofParser EOF_PARSER = new EofParser();
+
   private Parsers() {
-  }
-  
-  public static class TokenParser extends Parser<Token> {
-    private final Object myExpectedType;
-    private final String myExpectedText;
-
-    public TokenParser(@NotNull Object expectedType, @Nullable String expectedText) {
-      myExpectedType = expectedType;
-      myExpectedText = expectedText;
-    }
-
-    @NotNull
-    @Override
-    public ParserResult<Token> parse(@NotNull TokenStream tokens) throws ParserException {
-      final Token token = tokens.getToken();
-      if (token == null) {
-        throw new ParserException("Unexpected end of file", tokens.getOffset());
-      }
-      if (token.getType().equals(myExpectedType) && (myExpectedText == null || token.getText().equals(myExpectedText))) {
-        return new ParserResult<>(token, tokens.advance());
-      }
-      final String msg = String.format("Expected %s, got %s (%s)", myExpectedType, token.getType(), token.getText());
-      throw new ParserException(msg, token.getStartOffset());
-    }
   }
 
   @NotNull
@@ -66,17 +43,7 @@ public class Parsers {
 
   @NotNull
   public static SkipParser<?> eof() {
-    return new SkipParser<>(new BaseParser<Object>() {
-      @NotNull
-      @Override
-      public ParserResult<Object> parse(@NotNull TokenStream tokens) throws ParserException {
-        final Token token = tokens.getToken();
-        if (token == null) {
-          return new ParserResult<>(null, tokens);
-        }
-        throw new ParserException("Expected end of file, got " + token.getText(), token.getStartOffset());
-      }
-    });
+    return EOF_PARSER;
   }
 
   @NotNull

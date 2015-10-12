@@ -16,6 +16,8 @@ public abstract class BaseParser<T> {
   @NotNull
   public abstract ParserResult<T> parse(@NotNull TokenStream tokens) throws ParserException;
 
+  public abstract void accept(@NotNull ParserVisitor visitor);
+  
   @NotNull
   public final Parser<T> or(@NotNull final BaseParser<? extends T> other) {
     return new AlternativeParser<>(this, other);

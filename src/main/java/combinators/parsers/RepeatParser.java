@@ -42,4 +42,9 @@ class RepeatParser<T> extends Parser<List<T>> {
     }
     return new ParserResult<>(results, remaining);
   }
+
+  @Override
+  public void accept(@NotNull ParserVisitor visitor) {
+    visitor.visitRepeatParser(this);
+  }
 }
